@@ -7,10 +7,11 @@ use DesignMyNight\Mongodb\Passport\AuthCode;
 use DesignMyNight\Mongodb\Passport\Bridge\RefreshTokenRepository;
 use DesignMyNight\Mongodb\Passport\Client;
 use DesignMyNight\Mongodb\Passport\PersonalAccessClient;
-use DesignMyNight\Mongodb\Passport\RefreshToken;
 use DesignMyNight\Mongodb\Passport\Token;
 use Laravel\Passport\Bridge\RefreshTokenRepository as PassportRefreshTokenRepository;
 use Laravel\Passport\Passport;
+use DesignMyNight\Mongodb\Console\ClientCommand;
+use Laravel\Passport\Console\ClientCommand as OriginalClientCommand;
 
 class MongodbPassportServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,10 @@ class MongodbPassportServiceProvider extends ServiceProvider
 
         $this->app->bind(PassportRefreshTokenRepository::class, function () {
             return $this->app->make(RefreshTokenRepository::class);
+        });
+
+        $this->app->extend(OriginalClientCommand::class, function () {
+            return new ClientCommand();
         });
     }
 }
